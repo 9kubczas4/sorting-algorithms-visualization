@@ -6,11 +6,10 @@ import { SortingRoutingModule } from './sorting-routing.module';
 import { SortingPageComponent } from './components/sorting-page/sorting-page.component';
 
 
-
 @NgModule({
   declarations: [
     ...components,
-    SortingPageComponent
+    SortingPageComponent,
   ],
   imports: [
     CommonModule,
