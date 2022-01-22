@@ -1,5 +1,15 @@
 <app-header></app-header>
 <div class="sav__content">
-  <p>sorting-page works!</p>
+  <ng-container *ngIf="defaultImageSlicesUrls">
+    <app-image-container [imageSlicesUrls]="defaultImageSlicesUrls"></app-image-container>
+  </ng-container>
+  <ng-container *ngIf="mixedUpImageSlicesUrls">
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+    <app-image-container [imageSlicesUrls]="mixedUpImageSlicesUrls"></app-image-container>
+  </ng-container>
 </div>
 

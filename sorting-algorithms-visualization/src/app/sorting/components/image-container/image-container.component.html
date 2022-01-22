@@ -1,1 +1,5 @@
-<p>image-container works!</p>
+<div class="sav-image-container">
+  <div class="sav-image">
+    <img *ngFor="let sliceUrl of imageSlicesUrls" [src]="sliceUrl"/>
+  </div>
+</div>
