@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { materialModules } from './material';
 import { components } from './components';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -11,7 +12,8 @@ import { components } from './components';
   ],
   imports: [
     CommonModule,
-    ...materialModules
+    ...materialModules,
+    RouterModule
   ],
   exports: [
     ...components

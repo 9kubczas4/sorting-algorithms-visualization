@@ -1,1 +1,2 @@
-export const materialModules: any[] = [];
+export const materialModules: any[] = [
+];
