@@ -1,10 +1,13 @@
+import { SortResult } from './../../interfaces/sort-result';
+import { ImageSlice } from './../../models/image-slice';
 import { ReplaySubject } from 'rxjs';
 import { ArrayHelper } from './../../../core/helpers/array.helper';
 import { SortService } from './../../services/sort.service';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { SortingStatusService } from 'src/app/core/services/sorting-status.service';
 import { ImageSortingStatus } from 'src/app/core/enums/image-sorting-status';
 import { takeUntil } from 'rxjs/operators';
+import { SortType } from 'src/app/core/enums/sort-type';
 
 @Component({
   selector: 'app-sorting-page',
@@ -13,17 +16,24 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SortingPageComponent implements OnInit, OnDestroy {
-  public patternImageSlicesUrls: string[];
-  public mixedUpImageSlicesUrls: string[];
+  public patternImageSlicesUrls: ImageSlice[];
+  public mixedUpImageSlicesUrls: ImageSlice[];
+
+  public SortType = SortType;
+
+  private algorithmsSortStatus: { [strategy: string]: boolean } = {
+    [SortType.InsertSort]: false
+  };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private sortService: SortService,
-              private sortingStatusService: SortingStatusService) { }
+  constructor(private sortingStatusService: SortingStatusService,
+              private changeDetectionRef: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
     this.setPatternImageSlicesUrls();
     this.mixedUpImageSlicesUrls = [...this.patternImageSlicesUrls];
+    this.changeDetectionRef.detectChanges();
 
     this.sortingStatusService.sortingStatus()
     .pipe(takeUntil(this.destroyed$))
@@ -31,6 +41,7 @@ export class SortingPageComponent implements OnInit, OnDestroy {
       if (status === ImageSortingStatus.SHUFFLING) {
         this.mixedUpImageSlicesUrls = ArrayHelper.shuffle(ArrayHelper.clone(this.patternImageSlicesUrls));
         this.sortingStatusService.shuffled();
+        this.changeDetectionRef.detectChanges();
       }
     });
   }
@@ -40,11 +51,20 @@ export class SortingPageComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public sorted($event: SortResult): void {
+    this.algorithmsSortStatus[$event.strategy] = $event.sorted;
+
+    if (Object.values(this.algorithmsSortStatus).every(status => status)) {
+      this.sortingStatusService.sorted();
+    }
+  }
+
   private setPatternImageSlicesUrls(): void {
     this.patternImageSlicesUrls = [];
     for (let row = 1; row <= SortService.ROW_COUNT; row++) {
       for (let column = 1; column <= SortService.COLUMN_COUNT; column++) {
-        this.patternImageSlicesUrls.push(`../../../../assets/images/row-${row}-column-${column}.webp`);
+        this.patternImageSlicesUrls.push(new ImageSlice(`../../../../assets/images/row-${row}-column-${column}.webp`,
+          (row - 1) * SortService.COLUMN_COUNT + column));
       }
     }
   }

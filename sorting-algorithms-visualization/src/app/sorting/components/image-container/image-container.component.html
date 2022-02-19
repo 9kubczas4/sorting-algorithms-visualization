@@ -1,5 +1,5 @@
 <div class="sav-image-container">
   <div class="sav-image">
-    <img *ngFor="let sliceUrl of imageSlicesUrls" [src]="sliceUrl"/>
+    <img *ngFor="let slice of imageSlices" [src]="slice.url"/>
   </div>
 </div>
