@@ -1,21 +1,32 @@
 @import './../../../../assets/styles/core/theme_variables.scss';
 
-.sav__header {
-  display: flex;
-  justify-content: space-between;
-  background-color: $primary;
-  padding: 0.25rem 1rem;
+.sav {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    background-color: $primary;
+    padding: 0.25rem 1rem;
+  }
 
-  &-container {
-    button {
-      &:not(:last-child) {
-        margin-right: 1rem;
-      }
-    }
+  &__header-container {
+    display: flex;
+    align-items: center;
 
     button,
     a {
       color: $white;
     }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  &__header-status {
+    background-color: $white;
+    padding: 0 0.25rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
   }
 }
+
