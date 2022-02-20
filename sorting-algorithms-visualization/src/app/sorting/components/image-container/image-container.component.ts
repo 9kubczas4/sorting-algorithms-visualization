@@ -2,7 +2,7 @@ import { SortResult } from './../../interfaces/sort-result';
 import { concatMap, delay, takeUntil } from 'rxjs/operators';
 import { SortStrategyManagerService } from './../../../core/services/sort-strategy-manager.service';
 import { SortType } from './../../../core/enums/sort-type';
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ChangeDetectorRef, Output, EventEmitter, NgZone } from '@angular/core';
 import { ImageSlice } from '../../models/image-slice';
 import { SortingStatusService } from 'src/app/core/services/sorting-status.service';
 import { of, ReplaySubject, Subscription } from 'rxjs';
@@ -43,7 +43,8 @@ export class ImageContainerComponent implements OnInit, OnDestroy {
         .subscribe((status) => {
           if (status === ImageSortingStatus.SORTING_IN_PROGRESS) {
             this.sortingSubscription = this.sortStrategyManagerService.sort([...this.imageSlices], this.sortStrategy)
-              .pipe(concatMap(item => of(item).pipe(
+              .pipe(concatMap(item => of(item)
+              .pipe(
                 delay(this.DELAY_IN_MILLISECONDS)
               )))
               .subscribe((data) => {
