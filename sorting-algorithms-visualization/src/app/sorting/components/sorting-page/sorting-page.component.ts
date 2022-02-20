@@ -22,7 +22,8 @@ export class SortingPageComponent implements OnInit, OnDestroy {
   public SortType = SortType;
 
   private algorithmsSortStatus: { [strategy: string]: boolean } = {
-    [SortType.InsertSort]: false
+    [SortType.InsertSort]: false,
+    [SortType.QuickSort]: false
   };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -39,6 +40,9 @@ export class SortingPageComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.destroyed$))
     .subscribe((status) => {
       if (status === ImageSortingStatus.SHUFFLING) {
+        Object.keys(this.algorithmsSortStatus).forEach((algorithm) => {
+          this.algorithmsSortStatus[algorithm] = false;
+        });
         this.mixedUpImageSlicesUrls = ArrayHelper.shuffle(ArrayHelper.clone(this.patternImageSlicesUrls));
         this.sortingStatusService.shuffled();
         this.changeDetectionRef.detectChanges();

@@ -5,6 +5,7 @@
   </ng-container>
   <ng-container *ngIf="mixedUpImageSlicesUrls">
     <app-image-container [imageSlices]="mixedUpImageSlicesUrls" [sortStrategy]="SortType.InsertSort" (sorted)="sorted($event)"></app-image-container>
+    <app-image-container [imageSlices]="mixedUpImageSlicesUrls" [sortStrategy]="SortType.QuickSort" (sorted)="sorted($event)"></app-image-container>
   </ng-container>
 </div>
 
